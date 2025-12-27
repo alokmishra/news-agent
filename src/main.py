@@ -45,6 +45,14 @@ class NewsAgent:
                 result = await search_graph.ainvoke(inputs)
                 summaries[topic] = result.get("summary", "No summary generated.")
                 
+                # Log sources
+                sources = result.get("sources", [])
+                if sources:
+                    with open("data/sources_log.md", "a") as f:
+                        f.write(f"\n## Topic: {topic} ({datetime.now().strftime('%Y-%m-%d %H:%M')})\n")
+                        for s in sources:
+                            f.write(f"- {s}\n")
+                
             except Exception as e:
                 logger.error(f"Agent failed on topic {topic}: {e}")
                 summaries[topic] = f"## Error\nAgent failed: {str(e)}"

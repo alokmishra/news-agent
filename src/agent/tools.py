@@ -23,7 +23,8 @@ def search_web(query: str) -> List[str]:
         params = {
             "q": query,
             "api_key": api_key,
-            "engine": "google"
+            "engine": "google",
+            "tbs": "qdr:d" # Past 24 hours
         }
         search = GoogleSearch(params)
         results = search.get_dict().get("organic_results", [])

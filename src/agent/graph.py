@@ -22,7 +22,21 @@ def researcher_node(state: AgentState):
     # 1. Search
     results = search_web.invoke(f"{topic} news 2024")
     
-    return {"research_results": [f"Search Results for {topic}:\n{results}"]}
+    # Extract links from the formatted strings
+    links = []
+    for r in results:
+        # Each result is "Title: ...\nLink: ...\nSnippet: ..."
+        try:
+            link_line = [l for l in r.split('\n') if l.startswith('Link: ')]
+            if link_line:
+                links.append(link_line[0].replace('Link: ', '').strip())
+        except:
+            continue
+
+    return {
+        "research_results": [f"Search Results for {topic}:\n{results}"],
+        "sources": links
+    }
 
 def writer_node(state: AgentState):
     """Synthesizes the findings."""
