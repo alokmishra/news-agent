@@ -3,27 +3,32 @@ from trafilatura import extract
 import requests
 from typing import List
 
-# Direct implementation to avoid LangChain import issues
+import os
 try:
-    from duckduckgo_search import DDGS
+    from serpapi import GoogleSearch
 except ImportError:
-    try:
-        from ddgs import DDGS
-    except ImportError:
-        DDGS = None
+    GoogleSearch = None
 
 @tool
 def search_web(query: str) -> List[str]:
-    """Search the web for a query and return top results."""
-    if not DDGS:
-        return ["Error: duckduckgo-search package not correctly installed."]
+    """Search the web for a query using SerpApi."""
+    if not GoogleSearch:
+        return ["Error: serpapi package not installed. Run `pip install google-search-results`."]
     
+    api_key = os.getenv("SERPAPI_API_KEY")
+    if not api_key:
+        return ["Error: SERPAPI_API_KEY not found in .env"]
+
     try:
-        with DDGS() as ddgs:
-            # Fetch 5 results
-            results = list(ddgs.text(query, max_results=5))
-            # Format as strings
-            return [f"Title: {r.get('title')}\nLink: {r.get('href')}\nSnippet: {r.get('body')}" for r in results]
+        params = {
+            "q": query,
+            "api_key": api_key,
+            "engine": "google"
+        }
+        search = GoogleSearch(params)
+        results = search.get_dict().get("organic_results", [])
+        
+        return [f"Title: {r.get('title')}\nLink: {r.get('link')}\nSnippet: {r.get('snippet')}" for r in results[:5]]
     except Exception as e:
         return [f"Search failed: {str(e)}"]
 

@@ -10,6 +10,7 @@ def check_setup():
         import langchain_google_genai
         import mailjet_rest
         import langgraph
+        import serpapi
         print("[+] Dependencies imported successfully.")
     except ImportError as e:
         print(f"[-] Missing dependency: {e}")
@@ -22,7 +23,8 @@ def check_setup():
         "MAILJET_API_KEY",
         "MAILJET_SECRET_KEY", 
         "SENDER_EMAIL",
-        "RECIPIENT_EMAIL"
+        "RECIPIENT_EMAIL",
+        "SERPAPI_API_KEY"
     ]
     
     missing = []

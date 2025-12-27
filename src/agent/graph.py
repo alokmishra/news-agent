@@ -28,7 +28,7 @@ def writer_node(state: AgentState):
     """Synthesizes the findings."""
     print(f"--- Writing summary for: {state['topic']} ---")
     
-    model = ChatGoogleGenerativeAI(model="gemini-1.5-pro", google_api_key=os.getenv("GOOGLE_API_KEY"))
+    model = ChatGoogleGenerativeAI(model="gemini-3-pro-preview", api_key=os.getenv("GOOGLE_API_KEY"))
     
     context = "\n\n".join(state['research_results'])
     sys_msg = SystemMessage(content="You are an expert news analyst. Summarize the provided research context into a concise daily briefing.")
