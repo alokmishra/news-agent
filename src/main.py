@@ -74,8 +74,7 @@ if __name__ == "__main__":
     
     config = {
         'google_api_key': os.getenv('GOOGLE_API_KEY'),
-        'email_user': os.getenv('EMAIL_USER'),
-        'email_password': os.getenv('EMAIL_PASSWORD'),
+        'sender_email': os.getenv('SENDER_EMAIL'),
         'recipient_email': os.getenv('RECIPIENT_EMAIL')
     }
     

@@ -21,7 +21,7 @@ def check_setup():
         "GOOGLE_API_KEY",
         "MAILJET_API_KEY",
         "MAILJET_SECRET_KEY", 
-        "EMAIL_ADDRESS",
+        "SENDER_EMAIL",
         "RECIPIENT_EMAIL"
     ]
     

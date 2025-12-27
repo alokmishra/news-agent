@@ -5,7 +5,7 @@ class EmailSender:
     def __init__(self, config=None):
         api_key = os.getenv('MAILJET_API_KEY')
         api_secret = os.getenv('MAILJET_SECRET_KEY')
-        self.sender_email = os.getenv('EMAIL_ADDRESS') # Functioning as 'From' address
+        self.sender_email = os.getenv('SENDER_EMAIL') # Functioning as 'From' address
         self.client = Client(auth=(api_key, api_secret), version='v3.1')
 
     def render_template(self, summaries, date, article_count):
