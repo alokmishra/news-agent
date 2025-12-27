@@ -1,0 +1,18 @@
+# docker-compose.yml
+version: '3.8'
+
+services:
+  news-agent:
+    build: .
+    container_name: news-agent
+    restart: unless-stopped
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - SERPAPI_KEY=${SERPAPI_KEY}
+      - EMAIL_USER=${EMAIL_USER}
+      - EMAIL_PASSWORD=${EMAIL_PASSWORD}
+      - RECIPIENT_EMAIL=${RECIPIENT_EMAIL}
+    command: python src/main.py
