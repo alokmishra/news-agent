@@ -29,7 +29,7 @@ def search_web(query: str) -> List[str]:
         search = GoogleSearch(params)
         results = search.get_dict().get("organic_results", [])
         
-        return [f"Title: {r.get('title')}\nLink: {r.get('link')}\nSnippet: {r.get('snippet')}" for r in results[:5]]
+        return [f"Title: {r.get('title')}\nLink: {r.get('link')}\nSnippet: {r.get('snippet')}" for r in results[:10]]
     except Exception as e:
         return [f"Search failed: {str(e)}"]
 
