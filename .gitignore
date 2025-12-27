@@ -36,3 +36,4 @@ wheels/
 # Project Specific
 data/
 logs/
+src/test_setup.py

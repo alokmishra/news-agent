@@ -31,11 +31,13 @@ def writer_node(state: AgentState):
     model = ChatGoogleGenerativeAI(model="gemini-3-pro-preview", api_key=os.getenv("GOOGLE_API_KEY"))
     
     context = "\n\n".join(state['research_results'])
-    sys_msg = SystemMessage(content="You are an expert news analyst. Summarize the provided research context into a concise daily briefing.")
+    sys_msg = SystemMessage(content="You are an expert news analyst. Summarize the provided research context into a concise daily briefing with html formatting.")
     user_msg = HumanMessage(content=f"Topic: {state['topic']}\n\nContext:\n{context}")
     
     response = model.invoke([sys_msg, user_msg])
-    return {"summary": response.content}
+    
+    return {"summary": response.text}
+
 
 # Graph Construction
 workflow = StateGraph(AgentState)
