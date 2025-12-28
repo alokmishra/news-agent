@@ -91,3 +91,5 @@ xxhash==3.6.0
 yagmail==0.15.293
 yarl==1.22.0
 zstandard==0.25.0
+python-fasthtml
+langchain-google-genai

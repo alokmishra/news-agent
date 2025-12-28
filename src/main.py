@@ -17,22 +17,24 @@ class NewsAgent:
         self.config = config
         self.mailer = EmailSender(config)
     
-    async def run_daily_pipeline(self):
+    async def run_daily_pipeline(self, topics: List[str] = None):
         """Execute the complete pipeline using LangGraph"""
         logger.info("Starting daily news pipeline (Agentic Mode)...")
         
         # 1. Load Topics
-        try:
-            with open('src/topics.yaml') as f:
-                topic_config = yaml.safe_load(f)
-        except Exception as e:
-            logger.error(f"Failed to load topics.yaml: {e}")
-            return
+        if not topics:
+            try:
+                with open('src/topics.yaml') as f:
+                    topic_config = yaml.safe_load(f)
+                    topics = topic_config.get('topics', [])
+            except Exception as e:
+                logger.error(f"Failed to load topics.yaml: {e}")
+                return
 
         summaries = {}
         
         # 2. Run Graph for each topic
-        for topic in topic_config.get('topics', []):
+        for topic in topics:
             logger.info(f"Agent researching topic: {topic}")
             try:
                 # Invoke the graph
@@ -57,12 +59,9 @@ class NewsAgent:
                 logger.error(f"Agent failed on topic {topic}: {e}")
                 summaries[topic] = f"## Error\nAgent failed: {str(e)}"
         
-        # 3. Send email
-        await self.send_digest(summaries, len(summaries)) # Count topics, not articles now
-        
-        logger.info("Pipeline completed successfully")
+        return summaries
     
-    async def send_digest(self, summaries: Dict[str, str], article_count: int):
+    async def send_digest(self, summaries: Dict[str, str], article_count: int, to_email: str = None):
         """Generate and send email digest"""
         email_html = self.mailer.render_template(
             summaries=summaries,
@@ -72,7 +71,8 @@ class NewsAgent:
         
         await self.mailer.send_email(
             subject=f"Your Daily Agent Briefing: {datetime.now().strftime('%Y-%m-%d')}",
-            html_content=email_html
+            html_content=email_html,
+            to_email=to_email
         )
 
 if __name__ == "__main__":
